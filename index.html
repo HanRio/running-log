@@ -23,6 +23,11 @@
     background: var(--bg); color: var(--fg);
     font: 16px/1.4 Inter, -apple-system, system-ui, sans-serif; letter-spacing: -0.01em;
   }
+  body[data-screen="apply"] {
+    background-color: #141414;
+    background-image: repeating-linear-gradient(135deg, #141414 0 14px, #1a1a1a 14px 28px);
+    color: #F3F3EE;
+  }
   [hidden] { display: none !important; }
   main { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
   .screen { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
@@ -79,6 +84,96 @@
   th:first-child, td:first-child { text-align: left; }
   td button { background: none; border: 0; color: var(--muted); font-size: 16px; min-width: 32px; min-height: 32px; cursor: pointer; }
   #empty, #feedEmpty { color: var(--muted); text-align: center; padding: 16px 0; margin: 0; }
+
+  /* ---- #apply: challenge sign-up poster (dark screen only) ---- */
+  #apply .ticker { margin: 0 -16px; padding: 10px 16px; background: #000; overflow: hidden; white-space: nowrap; font-size: 13px; font-weight: 700; color: #DEFF24; }
+  #apply .ticker i { color: #FC6D00; font-style: normal; margin: 0 8px; }
+
+  #apply .intro { text-align: center; margin: 8px 0 0; }
+  #apply .pill { display: inline-block; margin: 0; padding: 4px 12px; border-radius: 999px; background: #DEFF24; color: #000; font-size: 12px; font-weight: 700; }
+  #apply h1 { margin: 12px 0 10px; font-size: 36px; font-weight: 900; line-height: 1.25; color: #fff; }
+  #apply .kg { color: #FC6D00; font-size: 56px; }
+  #apply h1 mark { background: #DEFF24; color: #1C1C1A; padding: 0 8px; }
+  #apply .sub { margin: 0 0 12px; font-size: 14px; line-height: 1.5; color: #B8B8B0; }
+  #apply .auth-note { font-size: 13px; color: #B8B8B0; }
+  #apply .link-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px;
+    min-height: 48px; padding: 0 22px; border: 2px solid #DEFF24; border-radius: 999px;
+    background: #DEFF24; color: #1C1C1A; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 0 0 4px #DEFF2433, 0 6px 18px #DEFF2440; transition: transform 150ms var(--ease);
+  }
+  #apply .link-btn:hover { transform: translateY(-1px); }
+  #apply .link-btn:active { transform: translateY(1px); }
+  #apply .link-btn:focus-visible { outline: 2px solid #FC6D00; outline-offset: 3px; }
+  #apply .signed-note { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  #apply .logout { color: #B8B8B0; }
+  #apply .foot { margin: 0; text-align: center; font-size: 12px; color: #8A8A80; }
+
+  #applyForm { display: block; background: #FFFDF5; color: #1C1C1A; border-radius: 24px; padding: 20px; }
+  #applyForm fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+  #applyForm legend { padding: 0; width: 100%; }
+  #applyForm .sec { margin: 0; padding: 20px 0 4px; border-top: 1px dashed #D9D4C0; }
+  #applyForm .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  #applyForm .sec-no { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #1C1C1A; color: #DEFF24; display: grid; place-items: center; font-size: 14px; font-weight: 800; }
+  #applyForm .sec-head h2 { margin: 0; font-size: 18px; font-weight: 800; }
+  #applyForm .sec-head p { margin: 2px 0 0; font-size: 12px; color: #7A7468; }
+  #applyForm .sec-body { display: flex; flex-direction: column; gap: 14px; }
+  #applyForm .field-title { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #1C1C1A; }
+  #applyForm .req { color: #FC6D00; }
+  #applyForm .opt { font-weight: 400; color: #9A9486; }
+  #applyForm .ap-hint { display: block; margin: 0; font-size: 12px; color: #7A7468; }
+  #applyForm .group-error { margin: 6px 0 0; font-size: 12px; font-weight: 700; color: #C4320A; }
+  #applyForm .liar-hint { margin: 0; font-size: 12px; font-weight: 700; color: #FC6D00; }
+  #applyForm .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  #applyForm label.field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #1C1C1A; }
+  #applyForm .field-input {
+    font: inherit; font-size: 16px; color: #1C1C1A; background: #fff; width: 100%; min-height: 48px;
+    padding: 12px 14px; border: 1.5px solid #E4DFCB; border-radius: 12px;
+  }
+  #applyForm textarea.field-input { min-height: 0; resize: vertical; }
+  #applyForm .field-input:focus { outline: none; border-color: #1C1C1A; }
+  #applyForm .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; min-height: 0; border: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; opacity: 0;
+  }
+  #applyForm .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  #applyForm label.chip {
+    display: inline-flex; flex-direction: row; align-items: center; gap: 0; min-height: 44px;
+    padding: 8px 12px; font-size: 14px; color: #1C1C1A; background: #fff;
+    border: 1.5px solid #E4DFCB; border-radius: 999px; cursor: pointer;
+  }
+  #applyForm label.chip:has(input:checked) { background: #DEFF24; border-color: #1C1C1A; }
+  #applyForm label.chip:has(input:focus-visible) { outline: 2px solid #FC6D00; outline-offset: 2px; }
+  #applyForm .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #applyForm .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  #applyForm label.card {
+    position: relative; display: flex; flex-direction: column; gap: 6px; min-height: 44px; padding: 14px;
+    font-size: 15px; color: #1C1C1A; background: #fff; border: 1.5px solid #E4DFCB; border-radius: 16px; cursor: pointer;
+  }
+  #applyForm label.card:has(input:checked) { background: #DEFF24; border-color: #1C1C1A; }
+  #applyForm label.card:has(input:focus-visible) { outline: 2px solid #FC6D00; outline-offset: 2px; }
+  #applyForm .emoji { font-size: 22px; line-height: 1; }
+  #applyForm label.card strong { font-size: 15px; font-weight: 700; }
+  #applyForm label.card small { font-size: 12px; color: #7A7468; }
+  #applyForm label.card:has(input:checked) small { color: #3A3A36; }
+  #applyForm .will { background: #fff; border: 1.5px solid #E4DFCB; border-radius: 16px; padding: 14px; }
+  #applyForm .will-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  #applyForm .will-value { font-size: 28px; font-weight: 800; color: #FC6D00; }
+  #applyForm .will-range { width: 100%; min-height: 0; margin: 12px 0 0; padding: 0; border: 0; background: none; accent-color: #FC6D00; }
+  #applyForm .consent {
+    display: flex; flex-direction: row; align-items: flex-start; gap: 12px; padding: 14px;
+    font-size: 14px; color: #1C1C1A; background: #F6F2E2; border-radius: 14px;
+  }
+  #applyForm .consent input { flex-shrink: 0; width: 20px; height: 20px; min-height: 0; margin: 2px 0 0; padding: 0; accent-color: #FC6D00; }
+  #applyForm .consent strong { display: block; font-weight: 700; }
+  #applyForm .consent small { display: block; margin-top: 4px; font-size: 12px; color: #7A7468; }
+  #applyForm .submit-btn {
+    width: 100%; min-height: 56px; margin-top: 24px; padding: 0 12px; font-size: 18px; font-weight: 800;
+    color: #1C1C1A; background: #FC6D00; border: 2px solid #1C1C1A; border-radius: 14px;
+    box-shadow: 4px 4px 0 #1C1C1A; cursor: pointer;
+  }
+  #applyForm .submit-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1C1C1A; opacity: 1; }
+  #applyForm .submit-btn:disabled { opacity: .6; }
   @media (prefers-reduced-motion: reduce) {
     .tile, button, .switch-row input, .switch-row input::before { transition: none; }
     .tile:hover { transform: none; }
@@ -89,30 +184,182 @@
 <main>
   <p id="msg" class="tile s4" role="alert" hidden></p>
 
-  <section id="landing" class="s4 screen" hidden>
-    <header class="tile s4"><h1>🏃 런닝 크루</h1><span class="label">함께 달리고 기록해요. 지원서를 내고 승인되면 기록을 남길 수 있어요.</span></header>
-    <button id="googleBtn" class="cta s4" type="button">Google로 지원하기</button>
-  </section>
-
   <section id="apply" class="s4 screen" hidden>
-    <div class="tile s4">
-      <h1>지원서</h1>
-      <form id="applyForm">
-        <label>이름 <input type="text" name="name" required maxlength="40"></label>
-        <label>연락처 <input type="tel" name="phone" required minlength="7" maxlength="20" inputmode="tel"></label>
-        <label class="full">러닝 경력
-          <select name="experience" required>
-            <option value="none">처음이에요</option>
-            <option value="lt1">1년 미만</option>
-            <option value="1to3">1~3년</option>
-            <option value="gt3">3년 이상</option>
-          </select>
-        </label>
-        <label class="full">지원 동기 <textarea name="motivation" required maxlength="1000" rows="4"></textarea></label>
-        <button type="submit">지원서 제출</button>
-      </form>
+    <div class="ticker s4">
+      <span>야식 금지</span><i>•</i><span>-5KG</span><i>•</i><span>오늘도 스쿼트</span><i>•</i><span>물 2L</span><i>•</i><span>계단 이용</span><i>•</i><span>치킨은 치팅데이에</span><i>•</i><span>할 수 있다</span><i>•</i><span>NO PAIN NO GAIN</span>
     </div>
-    <button type="button" class="logout s4">로그아웃</button>
+
+    <header class="intro s4">
+      <span class="pill">20대 단기 운동 모임 · 선수 모집 중</span>
+      <h1><span class="kg">-5kg</span> 챌린지<br><mark>참가 신청서</mark></h1>
+      <p class="sub">혼자 하면 작심삼일, 같이 하면 작심삼십일!<br>성별 상관없이, 함께 땀 흘리고 서로 감시(?)해 줄 20대 동료를 찾습니다 💪</p>
+      <div class="auth-note">
+        <button type="button" id="loginLink" class="link-btn">이미 신청했다면 로그인 →</button>
+        <div id="signedInNote" class="signed-note" hidden>
+          <span>로그인됨 · 제출하면 바로 접수돼요</span>
+          <button type="button" class="logout">로그아웃</button>
+        </div>
+      </div>
+    </header>
+
+    <form id="applyForm" class="s4">
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">1</span><div><h2>선수 등록</h2><p>챌린지에 참가할 당신은 누구인가요?</p></div></div>
+        <div class="fields">
+          <label class="field"><span class="field-title">이름 <b class="req">*</b></span>
+            <input class="field-input" type="text" name="name" required maxlength="40" placeholder="홍길동" autocomplete="name"></label>
+          <label class="field"><span class="field-title">챌린지 닉네임 <b class="req">*</b></span>
+            <input class="field-input" type="text" name="nickname" required maxlength="20" placeholder="예: 내일부터다이어트" autocomplete="nickname">
+            <span class="ap-hint">단톡방에서 불릴 이름이에요</span></label>
+          <label class="field"><span class="field-title">연령대 <b class="req">*</b></span>
+            <select class="field-input" name="age_group" required>
+              <option value="" disabled selected>선택해 주세요</option>
+              <option value="early20">20대 초반</option>
+              <option value="mid20">20대 중반</option>
+              <option value="late20">20대 후반</option>
+            </select></label>
+          <label class="field"><span class="field-title">거주지 <b class="req">*</b></span>
+            <input class="field-input" type="text" name="residence" required maxlength="40" placeholder="예: 서울 마포구" autocomplete="address-level2">
+            <span class="ap-hint">동네까지만 적어 주세요</span></label>
+          <label class="field"><span class="field-title">휴대폰 번호 <b class="req">*</b></span>
+            <input class="field-input" type="tel" name="phone" required inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" minlength="7" maxlength="20" pattern="[0-9\- ]{7,20}"></label>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">2</span><div><h2>현재 운동 레벨</h2><p>잘하든 못하든 상관없어요. 지금의 나를 솔직하게!</p></div></div>
+        <fieldset class="sec-body">
+          <legend class="field-title">평소 운동량은? <b class="req">*</b></legend>
+          <div class="card-grid">
+            <label class="card"><input class="visually-hidden" type="radio" name="activity_level" value="breathing" required><span class="emoji">🫁</span><strong>숨쉬기 운동만</strong><small>숨 쉬는 것도 운동이죠</small></label>
+            <label class="card"><input class="visually-hidden" type="radio" name="activity_level" value="walk"><span class="emoji">🚶</span><strong>가끔 산책</strong><small>주 1~2회 정도</small></label>
+            <label class="card"><input class="visually-hidden" type="radio" name="activity_level" value="regular"><span class="emoji">🏃</span><strong>꾸준히 운동</strong><small>주 3~4회</small></label>
+            <label class="card"><input class="visually-hidden" type="radio" name="activity_level" value="gym"><span class="emoji">🏋️</span><strong>헬창 예비군</strong><small>거의 매일 쇠질</small></label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">3</span><div><h2>나의 최대 적</h2><p>다이어트를 방해하는 빌런을 모두 골라 주세요</p></div></div>
+        <fieldset class="sec-body">
+          <legend class="field-title">나를 유혹하는 것들 <span class="opt">(선택)</span></legend>
+          <div class="chip-group">
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="late_snack"><span>🌙 야식</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="chicken"><span>🍗 치킨</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="ramen"><span>🍜 라면</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="tteokbokki"><span>🌶️ 떡볶이</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="alcohol"><span>🍺 술</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="dessert"><span>🍰 빵·디저트</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="sweet_drink"><span>🧋 달달한 음료</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="delivery"><span>📱 배달앱</span></label>
+            <label class="chip"><input class="visually-hidden" type="checkbox" name="temptations" value="couch"><span>🛋️ 소파와 침대</span></label>
+          </div>
+          <p class="liar-hint">아무것도 없다고요? 거짓말 탐지기 작동 중... 🕵️</p>
+        </fieldset>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">4</span><div><h2>훈련 계획</h2><p>어떤 운동을, 언제, 얼마나 할까요?</p></div></div>
+        <div class="sec-body">
+          <fieldset data-check="workouts">
+            <legend class="field-title">하고 싶은 운동 <b class="req">*</b></legend>
+            <div class="chip-group">
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="running"><span>🏃 러닝</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="gym"><span>🏋️ 헬스</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="home"><span>🏠 홈트</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="jump_rope"><span>🪢 줄넘기</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="hiking"><span>⛰️ 등산</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="cycling"><span>🚴 자전거</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="swimming"><span>🏊 수영</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="yoga"><span>🧘 요가·필라테스</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="workouts" value="dance"><span>💃 댄스</span></label>
+            </div>
+            <p class="ap-hint">여러 개 선택할 수 있어요</p>
+            <p class="group-error" hidden>하나 이상 골라 주세요</p>
+          </fieldset>
+
+          <fieldset data-check="time_slots">
+            <legend class="field-title">운동 가능한 시간대 <b class="req">*</b></legend>
+            <div class="chip-group">
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="time_slots" value="dawn"><span>🌅 새벽 (6~8시)</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="time_slots" value="lunch"><span>☀️ 점심시간</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="time_slots" value="evening"><span>🌆 퇴근 후 저녁</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="time_slots" value="night"><span>🌙 밤 (21시 이후)</span></label>
+              <label class="chip"><input class="visually-hidden" type="checkbox" name="time_slots" value="weekend"><span>📅 주말</span></label>
+            </div>
+            <p class="ap-hint">여러 개 선택할 수 있어요</p>
+            <p class="group-error" hidden>하나 이상 골라 주세요</p>
+          </fieldset>
+
+          <fieldset>
+            <legend class="field-title">희망 챌린지 기간 <b class="req">*</b></legend>
+            <div class="card-grid cols-3">
+              <label class="card"><input class="visually-hidden" type="radio" name="duration_weeks" value="4" required><span class="emoji">⚡</span><strong>4주</strong><small>짧고 굵게, 스파르타</small></label>
+              <label class="card"><input class="visually-hidden" type="radio" name="duration_weeks" value="6"><span class="emoji">🔥</span><strong>6주</strong><small>적당히 빡세게</small></label>
+              <label class="card"><input class="visually-hidden" type="radio" name="duration_weeks" value="8"><span class="emoji">🐢</span><strong>8주</strong><small>천천히, 하지만 확실하게</small></label>
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">5</span><div><h2>멘탈 체크</h2><p>몸보다 중요한 건 마음가짐</p></div></div>
+        <div class="sec-body">
+          <div>
+            <p class="field-title">지금 나의 의지력 게이지 <span class="opt">(선택)</span></p>
+            <div class="will">
+              <div class="will-top">
+                <b id="willValue" class="will-value">5/10</b>
+              </div>
+              <input class="will-range" type="range" name="willpower" min="1" max="10" value="5" aria-label="의지력">
+            </div>
+          </div>
+
+          <fieldset>
+            <legend class="field-title">나에게 맞는 응원 스타일 <b class="req">*</b></legend>
+            <div class="card-grid">
+              <label class="card"><input class="visually-hidden" type="radio" name="cheer_style" value="praise" required><span class="emoji">🥰</span><strong>칭찬 폭격형</strong><small>물 한 잔만 마셔도 박수 쳐 주세요</small></label>
+              <label class="card"><input class="visually-hidden" type="radio" name="cheer_style" value="roast"><span class="emoji">🔥</span><strong>팩폭 독설형</strong><small>"그거 먹으면 목표 언제 달성해요?"</small></label>
+              <label class="card"><input class="visually-hidden" type="radio" name="cheer_style" value="quiet"><span class="emoji">🤫</span><strong>조용한 응원형</strong><small>말없이 지켜봐 주세요</small></label>
+              <label class="card"><input class="visually-hidden" type="radio" name="cheer_style" value="compete"><span class="emoji">⚔️</span><strong>경쟁 자극형</strong><small>랭킹 붙여 주면 불타요</small></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="field-title">인증 실패 시 벌칙 투표 <b class="req">*</b></legend>
+            <div class="chip-group">
+              <label class="chip"><input class="visually-hidden" type="radio" name="penalty_vote" value="fine" required><span>💸 벌금 1만 원 (회식비 적립)</span></label>
+              <label class="chip"><input class="visually-hidden" type="radio" name="penalty_vote" value="selfie"><span>🤳 단톡방에 셀카 인증</span></label>
+              <label class="chip"><input class="visually-hidden" type="radio" name="penalty_vote" value="coffee"><span>☕ 다음 모임 커피 쏘기</span></label>
+              <label class="chip"><input class="visually-hidden" type="radio" name="penalty_vote" value="squat"><span>🦵 스쿼트 100개 영상 인증</span></label>
+            </div>
+            <p class="ap-hint">가장 많은 표를 받은 벌칙이 적용돼요 😈</p>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head"><span class="sec-no">6</span><div><h2>결승선 너머</h2><p>챌린지를 끝낸 미래의 나를 상상해 봐요</p></div></div>
+        <div class="sec-body">
+          <label class="field"><span class="field-title">챌린지 완주하면 나에게 줄 보상 <span class="opt">(선택)</span></span>
+            <input class="field-input" type="text" name="reward" maxlength="100" placeholder="예: 작아서 못 입던 청바지 입고 여행 가기"></label>
+          <label class="field"><span class="field-title">각오 한마디 <span class="opt">(선택)</span></span>
+            <textarea class="field-input" name="resolution" maxlength="300" rows="3" placeholder="예: 이번엔 진짜 진짜 진짜입니다. 치킨아 잠시만 안녕 👋"></textarea></label>
+          <label class="field"><span class="field-title">운동 시 주의할 건강 상태 <span class="opt">(선택)</span></span>
+            <input class="field-input" type="text" name="health_note" maxlength="300" placeholder="예: 무릎이 약해요">
+            <span class="ap-hint">부상·지병 등 운동하며 알아야 할 것이 있다면 적어 주세요</span></label>
+        </div>
+      </section>
+
+      <label class="consent">
+        <input type="checkbox" name="privacy_consent" required>
+        <span><strong>[필수] 개인정보 수집·이용에 동의합니다.</strong><small>건강 정보를 포함한 입력 내용은 챌린지 운영과 연락 목적으로만 사용하며, 모임 종료 후 파기합니다.</small></span>
+      </label>
+
+      <button id="submitBtn" type="submit" class="submit-btn">챌린지 참가하기 🔥</button>
+    </form>
+
+    <p class="foot s4">* 표시는 필수 항목입니다 · 작성 시간 약 3분 (칼로리 소모 약 2kcal)</p>
   </section>
 
   <section id="pending" class="s4 screen" hidden>
@@ -184,11 +431,14 @@ const PENDING_COPY = {
   pending: { title: '검토 중이에요', text: '운영자가 지원서를 확인하면 기록 페이지가 열려요.' },
   rejected: { title: '이번엔 함께하지 못해요', text: '지원해 주셔서 고마워요.' },
 };
+const APPLY_DRAFT_KEY = 'pendingApplication';
 
 let me = null;
 let myRuns = [];
+let isSubmitting = false;
 const f = document.getElementById('f');
 f.date.value = new Date().toLocaleDateString('sv'); // local YYYY-MM-DD; valueAsDate would use UTC
+const applyForm = document.getElementById('applyForm');
 
 function showMsg(text) {
   const el = document.getElementById('msg');
@@ -210,6 +460,12 @@ function fail(error) {
 
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => { s.hidden = s.id !== id; });
+  document.body.dataset.screen = id;
+}
+
+function setAuthHint(isSignedIn) {
+  document.getElementById('loginLink').hidden = isSignedIn;
+  document.getElementById('signedInNote').hidden = !isSignedIn;
 }
 
 async function route() {
@@ -219,11 +475,21 @@ async function route() {
     me = null;
     myRuns = [];
     f.weight.value = '';
-    return show('landing');
+    setAuthHint(false);
+    return show('apply');
   }
-  const { data, error } = await sb.from('profiles').select('id,name,status,weight_public').maybeSingle();
+  const { data, error } = await sb.from('profiles').select('id,name,nickname,status,weight_public').maybeSingle();
   if (fail(error)) return;
-  if (!data) return show('apply');
+  if (!data) {
+    setAuthHint(true);
+    show('apply');
+    const draft = readDraft();
+    if (draft) {
+      fillForm(draft);
+      await submitApplication(draft);
+    }
+    return;
+  }
   if (data.status !== 'approved') {
     const copy = PENDING_COPY[data.status] ?? PENDING_COPY.pending;
     document.getElementById('pendingTitle').textContent = copy.title;
@@ -231,7 +497,7 @@ async function route() {
     return show('pending');
   }
   me = data;
-  document.getElementById('greet').textContent = `${data.name}님, 오늘도 한 걸음`;
+  document.getElementById('greet').textContent = `${data.nickname}님, 오늘도 한 걸음`;
   document.getElementById('weightPublic').checked = data.weight_public;
   show('app');
   await Promise.all([loadRuns(), loadFeed()]);
@@ -272,34 +538,156 @@ async function loadFeed() {
   document.getElementById('feedEmpty').hidden = rows.length > 0;
 }
 
-document.getElementById('googleBtn').addEventListener('click', async () => {
+async function startGoogleLogin() {
   const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
   fail(error);
+}
+
+function saveDraft(app) {
+  try {
+    sessionStorage.setItem(APPLY_DRAFT_KEY, JSON.stringify(app));
+    return true;
+  } catch {
+    showMsg('이 브라우저에서는 신청서를 임시 저장할 수 없어요. 잠시 후 다시 시도해 주세요.');
+    return false;
+  }
+}
+
+function readDraft() {
+  try {
+    return JSON.parse(sessionStorage.getItem(APPLY_DRAFT_KEY)) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function clearDraft() {
+  try {
+    sessionStorage.removeItem(APPLY_DRAFT_KEY);
+  } catch {
+    // storage unavailable means no draft was saved, so there is nothing to clear
+  }
+}
+
+function setFieldValue(el, value) {
+  if (el.type === 'radio') el.checked = el.value === String(value);
+  else if (el.type === 'checkbox') el.checked = Array.isArray(value) ? value.includes(el.value) : value === true;
+  else el.value = value ?? '';
+}
+
+function fillForm(app) {
+  for (const [key, value] of Object.entries(app)) {
+    applyForm.querySelectorAll(`[name="${key}"]`).forEach(el => setFieldValue(el, value));
+  }
+  refreshApply();
+}
+
+function readText(fd, key) {
+  return String(fd.get(key) ?? '').trim();
+}
+
+function readOptional(fd, key) {
+  return readText(fd, key) || null;
+}
+
+function collectApplication(form) {
+  const fd = new FormData(form);
+  return {
+    name: readText(fd, 'name'),
+    nickname: readText(fd, 'nickname'),
+    phone: readText(fd, 'phone'),
+    residence: readText(fd, 'residence'),
+    age_group: fd.get('age_group'),
+    activity_level: fd.get('activity_level'),
+    temptations: fd.getAll('temptations'),
+    workouts: fd.getAll('workouts'),
+    time_slots: fd.getAll('time_slots'),
+    duration_weeks: Number(fd.get('duration_weeks')),
+    willpower: Number(fd.get('willpower')),
+    cheer_style: fd.get('cheer_style'),
+    penalty_vote: fd.get('penalty_vote'),
+    reward: readOptional(fd, 'reward'),
+    resolution: readOptional(fd, 'resolution'),
+    health_note: readOptional(fd, 'health_note'),
+    privacy_consent: true,
+  };
+}
+
+function hasChecked(group) {
+  return group.querySelector('input:checked') !== null;
+}
+
+function validateGroups(form) {
+  if (!form.reportValidity()) return false;
+  const groups = [...form.querySelectorAll('fieldset[data-check]')];
+  groups.forEach(group => { group.querySelector('.group-error').hidden = hasChecked(group); });
+  const empty = groups.find(group => !hasChecked(group));
+  if (!empty) return true;
+  empty.querySelector('.group-error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return false;
+}
+
+function syncWill(range) {
+  document.getElementById('willValue').textContent = `${range.value}/10`;
+}
+
+function refreshApply() {
+  syncWill(applyForm.querySelector('input[name="willpower"]'));
+}
+
+function onApplyEdit(e) {
+  const group = e.target.closest('fieldset[data-check]');
+  if (group) group.querySelector('.group-error').hidden = true;
+  refreshApply();
+}
+
+async function submitApplication(app) {
+  if (isSubmitting) return;
+  isSubmitting = true;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  try {
+    const { error } = await sb.from('profiles').insert(app);
+    if (fail(error)) return;
+    clearDraft();
+    await route();
+  } finally {
+    isSubmitting = false;
+    btn.disabled = false;
+  }
+}
+
+async function onApplySubmit(e) {
+  e.preventDefault();
+  if (!validateGroups(applyForm)) return;
+  const app = collectApplication(applyForm);
+  const { data: { session }, error } = await sb.auth.getSession();
+  if (fail(error)) return;
+  if (session) {
+    await submitApplication(app);
+    return;
+  }
+  if (saveDraft(app)) await startGoogleLogin();
+}
+
+document.getElementById('loginLink').addEventListener('click', startGoogleLogin);
+
+applyForm.addEventListener('input', onApplyEdit);
+applyForm.addEventListener('change', onApplyEdit);
+applyForm.addEventListener('submit', onApplySubmit);
+
+document.getElementById('list').addEventListener('click', async e => {
+  const btn = e.target.closest('button[data-id]');
+  if (!btn || !confirm('이 기록을 삭제할까요?')) return;
+  const { error } = await sb.from('runs').delete().eq('id', btn.dataset.id);
+  if (fail(error)) return;
+  await Promise.all([loadRuns(), loadFeed()]);
 });
 
 document.querySelectorAll('.logout').forEach(btn => btn.addEventListener('click', async () => {
   const { error } = await sb.auth.signOut();
   fail(error);
 }));
-
-document.getElementById('applyForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const form = e.currentTarget;
-  const btn = form.querySelector('button[type=submit]');
-  const d = new FormData(form);
-  btn.disabled = true;
-  try {
-    const { error } = await sb.from('profiles').insert({
-      name: d.get('name').trim(),
-      phone: d.get('phone').trim(),
-      experience: d.get('experience'),
-      motivation: d.get('motivation').trim(),
-    });
-    if (!fail(error)) await route();
-  } finally {
-    btn.disabled = false;
-  }
-});
 
 f.addEventListener('submit', async e => {
   e.preventDefault();
@@ -321,14 +709,6 @@ f.addEventListener('submit', async e => {
   }
 });
 
-document.getElementById('list').addEventListener('click', async e => {
-  const btn = e.target.closest('button[data-id]');
-  if (!btn || !confirm('이 기록을 삭제할까요?')) return;
-  const { error } = await sb.from('runs').delete().eq('id', btn.dataset.id);
-  if (fail(error)) return;
-  await Promise.all([loadRuns(), loadFeed()]);
-});
-
 document.getElementById('weightPublic').addEventListener('change', async e => {
   const el = e.currentTarget;
   const want = el.checked;
@@ -341,6 +721,7 @@ sb.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') setTimeout(route, 0);
 });
 
+refreshApply();
 route();
 </script>
 </body>
