@@ -2,6 +2,8 @@
 
 지원서를 내고 운영자 승인을 받은 회원만 러닝 기록을 남기고, 회원끼리 서로의 기록을 볼 수 있는 모바일 웹이에요.
 
+> 🙋 **개발을 몰라도 괜찮아요.** 프로그램 설치 없이 브라우저만으로 따라 하는 [비전공자용 설치 가이드 (GUIDE.md)](GUIDE.md)를 보세요.
+
 - **프론트엔드:** `index.html` 한 파일 (HTML + CSS + JS, 빌드 과정 없음)
 - **데이터베이스·로그인:** [Supabase](https://supabase.com) (Postgres + Google 로그인)
 - **배포:** [Vercel](https://vercel.com) (정적 파일 호스팅)
