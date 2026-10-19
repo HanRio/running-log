@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F3EE">
+<title>런닝 기록</title>
+<style>
+  /* bento-grid tokens: design-isms dev-guides.json["bento-grid"] */
+  :root {
+    color-scheme: light;
+    /* lime accent (user pick) on soft neutrals; charcoal tiles for contrast */
+    --bg: #F3F3EE; --card: #FFFFFF; --fg: #1C1C1A; --muted: #6F6F66; --line: #E4E4DC;
+    --accent: #DEFF24; --on-accent: #1C1C1A; /* lime needs dark text */
+    --pop: #1C1C1A; --on-pop: #F3F3EE;
+    --radius: 16px; --gap: 12px; /* ponytail: guide says 24px gap; halved to fit 375px phones */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto; max-width: 430px; min-height: 100dvh;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    background: var(--bg); color: var(--fg);
+    font: 16px/1.4 Inter, -apple-system, system-ui, sans-serif; letter-spacing: -0.01em;
+  }
+  [hidden] { display: none !important; }
+  main { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+  .screen { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+  .tile { background: var(--card); border-radius: var(--radius); padding: 16px; transition: transform 250ms var(--ease); }
+  .tile:hover { transform: scale(1.02); }
+  .s4 { grid-column: span 4; } .s2 { grid-column: span 2; }
+  h1 { margin: 4px 0; font-size: 28px; font-weight: 600; }
+  .label { font-size: 13px; color: var(--muted); }
+  .num { display: block; font-size: 28px; font-weight: 600; margin-top: 4px; }
+  .num small { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 2px; }
+  .hero { background: var(--accent); color: var(--on-accent); }
+  .hero .label, .hero small { color: #1D1D1FB3; }
+  .pop { background: var(--pop); color: var(--on-pop); }
+  .pop .label, .pop small { color: #F3F3EEB3; }
+  .hero .num { font-size: 44px; }
+  #msg { margin: 0; color: #FF3B30; }
+  #pendingText { margin: 8px 0 0; }
+
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  form label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+  form .full { grid-column: span 2; }
+  input, select, textarea {
+    font: inherit; color: var(--fg); background: var(--bg); width: 100%; min-height: 44px;
+    padding: 8px 12px; border: 1px solid transparent; border-radius: 12px;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--fg); }
+  button[type=submit], .cta {
+    min-height: 48px; border: 0; border-radius: 12px; cursor: pointer;
+    font: inherit; font-weight: 600; background: var(--accent); color: var(--on-accent); transition: opacity 250ms var(--ease);
+  }
+  button[type=submit] { grid-column: span 2; }
+  button[type=submit]:active, .cta:active { opacity: .8; }
+  .logout { background: none; border: 0; color: var(--muted); font: inherit; min-height: 44px; cursor: pointer; }
+
+  .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+  .switch-row input {
+    appearance: none; -webkit-appearance: none; position: relative; flex-shrink: 0;
+    width: 51px; height: 31px; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 999px;
+    background: var(--line); cursor: pointer; transition: background 250ms var(--ease);
+  }
+  .switch-row input::before {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 3px #0003; transition: transform 250ms var(--ease);
+  }
+  .switch-row input:checked { background: var(--accent); }
+  .switch-row input:checked::before { transform: translateX(20px); }
+  .switch-row input:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+  .hint { display: block; margin-top: 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th { font-weight: 500; font-size: 12px; color: var(--muted); }
+  th, td { padding: 8px 2px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  th:first-child, td:first-child { text-align: left; }
+  td button { background: none; border: 0; color: var(--muted); font-size: 16px; min-width: 32px; min-height: 32px; cursor: pointer; }
+  #empty, #feedEmpty { color: var(--muted); text-align: center; padding: 16px 0; margin: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .tile, button, .switch-row input, .switch-row input::before { transition: none; }
+    .tile:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p id="msg" class="tile s4" role="alert" hidden></p>
+
+  <section id="landing" class="s4 screen" hidden>
+    <header class="tile s4"><h1>🏃 런닝 크루</h1><span class="label">함께 달리고 기록해요. 지원서를 내고 승인되면 기록을 남길 수 있어요.</span></header>
+    <button id="googleBtn" class="cta s4" type="button">Google로 지원하기</button>
+  </section>
+
+  <section id="apply" class="s4 screen" hidden>
+    <div class="tile s4">
+      <h1>지원서</h1>
+      <form id="applyForm">
+        <label>이름 <input type="text" name="name" required maxlength="40"></label>
+        <label>연락처 <input type="tel" name="phone" required minlength="7" maxlength="20" inputmode="tel"></label>
+        <label class="full">러닝 경력
+          <select name="experience" required>
+            <option value="none">처음이에요</option>
+            <option value="lt1">1년 미만</option>
+            <option value="1to3">1~3년</option>
+            <option value="gt3">3년 이상</option>
+          </select>
+        </label>
+        <label class="full">지원 동기 <textarea name="motivation" required maxlength="1000" rows="4"></textarea></label>
+        <button type="submit">지원서 제출</button>
+      </form>
+    </div>
+    <button type="button" class="logout s4">로그아웃</button>
+  </section>
+
+  <section id="pending" class="s4 screen" hidden>
+    <div class="tile s4">
+      <h1 id="pendingTitle"></h1>
+      <p id="pendingText" class="label"></p>
+    </div>
+    <button type="button" class="logout s4">로그아웃</button>
+  </section>
+
+  <section id="app" class="s4 screen" hidden>
+    <header class="tile s4"><span class="label" id="greet"></span><h1>🏃 런닝 & 칼로리</h1></header>
+
+    <div class="tile hero s4"><span class="label">총 칼로리</span><b class="num"><span id="tKcal">0</span><small>kcal</small></b></div>
+    <div class="tile pop s2"><span class="label">총 거리</span><b class="num"><span id="tKm">0</span><small>km</small></b></div>
+    <div class="tile pop s2"><span class="label">횟수</span><b class="num"><span id="tCnt">0</span><small>회</small></b></div>
+
+    <section class="tile s4" aria-label="기록 추가">
+      <form id="f">
+        <label>날짜 <input type="date" name="date" required></label>
+        <label>체중 (kg) <input type="number" inputmode="decimal" name="weight" min="20" max="300" step="0.1" required></label>
+        <label>거리 (km) <input type="number" inputmode="decimal" name="km" min="0.1" max="500" step="0.01" required></label>
+        <label>시간 (분) <input type="number" inputmode="numeric" name="minutes" min="1" max="2000" step="1" required></label>
+        <button type="submit">기록 추가</button>
+      </form>
+    </section>
+
+    <div class="tile s4">
+      <label class="switch-row">체중 공개 <input type="checkbox" id="weightPublic" role="switch"></label>
+      <span class="label hint">끄면 다른 회원에게 체중과 칼로리가 보이지 않아요.</span>
+    </div>
+
+    <section class="tile s4" aria-label="기록 목록">
+      <table>
+        <thead><tr><th>날짜</th><th>거리</th><th>시간</th><th>페이스</th><th>kcal</th><th></th></tr></thead>
+        <tbody id="list"></tbody>
+      </table>
+      <p id="empty">아직 기록이 없어요</p>
+    </section>
+
+    <section class="tile s4" aria-label="회원 피드">
+      <span class="label">회원 피드</span>
+      <table>
+        <thead><tr><th>이름</th><th>날짜</th><th>거리</th><th>페이스</th><th>kcal</th></tr></thead>
+        <tbody id="feed"></tbody>
+      </table>
+      <p id="feedEmpty">아직 기록이 없어요</p>
+    </section>
+
+    <button type="button" class="logout s4">로그아웃</button>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+// Public by design: access is enforced by Row Level Security in supabase/migrations.
+const SUPABASE_URL = 'https://tmvleiyuwvnamtnibxgb.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtdmxlaXl1d3ZuYW10bmlieGdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDI5MDcsImV4cCI6MjEwNzk3ODkwN30.oIRWVO4AoCVtlRig3Qwpdi1N0jrEu-cI5TtQT_w-HtY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.sb = sb; // used for manual testing from the console
+
+const ESC_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+const esc = s => String(s).replace(/[&<>"']/g, c => ESC_MAP[c]);
+// ponytail: ~1 kcal per kg per km (ACSM rule of thumb); swap for MET × time if pace-sensitivity matters
+const kcal = r => Math.round(r.weight * r.km * 1.036);
+const pace = r => { const s = Math.round(r.minutes * 60 / r.km); return `${Math.floor(s / 60)}'${String(s % 60).padStart(2, '0')}"`; };
+const shortDate = d => d.slice(5).replace('-', '.');
+const PENDING_COPY = {
+  pending: { title: '검토 중이에요', text: '운영자가 지원서를 확인하면 기록 페이지가 열려요.' },
+  rejected: { title: '이번엔 함께하지 못해요', text: '지원해 주셔서 고마워요.' },
+};
+
+let me = null;
+let myRuns = [];
+const f = document.getElementById('f');
+f.date.value = new Date().toLocaleDateString('sv'); // local YYYY-MM-DD; valueAsDate would use UTC
+
+function showMsg(text) {
+  const el = document.getElementById('msg');
+  el.textContent = text;
+  el.hidden = false;
+}
+
+function clearMsg() {
+  const el = document.getElementById('msg');
+  el.textContent = '';
+  el.hidden = true;
+}
+
+function fail(error) {
+  if (!error) return false;
+  showMsg('문제가 생겼어요: ' + error.message);
+  return true;
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => { s.hidden = s.id !== id; });
+}
+
+async function route() {
+  clearMsg();
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    me = null;
+    myRuns = [];
+    f.weight.value = '';
+    return show('landing');
+  }
+  const { data, error } = await sb.from('profiles').select('id,name,status,weight_public').maybeSingle();
+  if (fail(error)) return;
+  if (!data) return show('apply');
+  if (data.status !== 'approved') {
+    const copy = PENDING_COPY[data.status] ?? PENDING_COPY.pending;
+    document.getElementById('pendingTitle').textContent = copy.title;
+    document.getElementById('pendingText').textContent = copy.text;
+    return show('pending');
+  }
+  me = data;
+  document.getElementById('greet').textContent = `${data.name}님, 오늘도 한 걸음`;
+  document.getElementById('weightPublic').checked = data.weight_public;
+  show('app');
+  await Promise.all([loadRuns(), loadFeed()]);
+}
+
+async function loadRuns() {
+  const { data, error } = await sb.from('runs')
+    .select('id,run_date,km,minutes,weight')
+    .order('run_date', { ascending: false })
+    .order('id', { ascending: false });
+  if (fail(error)) return;
+  myRuns = data.map(r => ({ ...r, km: Number(r.km), minutes: Number(r.minutes), weight: Number(r.weight) }));
+  renderRuns();
+}
+
+function renderRuns() {
+  document.getElementById('list').innerHTML = myRuns.map(r => `
+    <tr><td>${esc(shortDate(r.run_date))}</td><td>${esc(r.km)}km</td><td>${esc(r.minutes)}분</td><td>${esc(pace(r))}</td><td>${esc(kcal(r))}</td>
+    <td><button data-id="${esc(r.id)}" aria-label="삭제">✕</button></td></tr>`).join('');
+  document.getElementById('empty').hidden = myRuns.length > 0;
+  document.getElementById('tKm').textContent = myRuns.reduce((s, r) => s + r.km, 0).toFixed(1);
+  document.getElementById('tKcal').textContent = myRuns.reduce((s, r) => s + kcal(r), 0).toLocaleString();
+  document.getElementById('tCnt').textContent = myRuns.length;
+  if (!f.weight.value) f.weight.value = myRuns[0]?.weight ?? '';
+}
+
+async function loadFeed() {
+  const { data, error } = await sb.rpc('feed', { max_rows: 50 });
+  if (fail(error)) return;
+  const rows = data.map(r => ({
+    ...r,
+    km: Number(r.km),
+    minutes: Number(r.minutes),
+    weight: r.weight === null ? null : Number(r.weight),
+  }));
+  document.getElementById('feed').innerHTML = rows.map(r => `
+    <tr><td>${esc(r.runner)}${r.is_mine ? ' (나)' : ''}</td><td>${esc(shortDate(r.run_date))}</td><td>${esc(r.km)}km</td><td>${esc(pace(r))}</td><td>${r.weight === null ? '—' : esc(kcal(r))}</td></tr>`).join('');
+  document.getElementById('feedEmpty').hidden = rows.length > 0;
+}
+
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
+  fail(error);
+});
+
+document.querySelectorAll('.logout').forEach(btn => btn.addEventListener('click', async () => {
+  const { error } = await sb.auth.signOut();
+  fail(error);
+}));
+
+document.getElementById('applyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const btn = form.querySelector('button[type=submit]');
+  const d = new FormData(form);
+  btn.disabled = true;
+  try {
+    const { error } = await sb.from('profiles').insert({
+      name: d.get('name').trim(),
+      phone: d.get('phone').trim(),
+      experience: d.get('experience'),
+      motivation: d.get('motivation').trim(),
+    });
+    if (!fail(error)) await route();
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = f.querySelector('button[type=submit]');
+  const d = new FormData(f);
+  btn.disabled = true;
+  try {
+    const { error } = await sb.from('runs').insert({
+      run_date: d.get('date'),
+      km: Number(d.get('km')),
+      minutes: Number(d.get('minutes')),
+      weight: Number(d.get('weight')),
+    });
+    if (fail(error)) return;
+    f.km.value = f.minutes.value = '';
+    await Promise.all([loadRuns(), loadFeed()]);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('list').addEventListener('click', async e => {
+  const btn = e.target.closest('button[data-id]');
+  if (!btn || !confirm('이 기록을 삭제할까요?')) return;
+  const { error } = await sb.from('runs').delete().eq('id', btn.dataset.id);
+  if (fail(error)) return;
+  await Promise.all([loadRuns(), loadFeed()]);
+});
+
+document.getElementById('weightPublic').addEventListener('change', async e => {
+  const el = e.currentTarget;
+  const want = el.checked;
+  const { error } = await sb.from('profiles').update({ weight_public: want }).eq('id', me.id);
+  if (fail(error)) { el.checked = !want; return; }
+  await loadFeed();
+});
+
+sb.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') setTimeout(route, 0);
+});
+
+route();
+</script>
+</body>
+</html>
